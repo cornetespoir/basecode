@@ -88,21 +88,15 @@ before we get into the actual theme, important things to know:
         <meta name="color:text" content="#222" />
         <meta name="color:blockquote border" content="#222"/>
         <meta name="color:links" content="#222" />
-        <meta name="color:sidebar" content="#fff" />
-        <meta name="color:sidebar header" content="#f2dadc" />
+        <meta name="color:sidebar header" content="#facade" />
         <meta name="color:posts" content="#fff" />
-        <meta name="color:answer posts" content="#f8f8f8" />
-        <meta name="color:link post" content="#222" />
-        <meta name="color:link text" content="#fff" />
-        <meta name="color:quotes" content="#222" />
-        <meta name="color:quote text" content="#fff" />
+
         
         <!-- text options -->
         <meta name="text:Google Font" content="Poppins" />
         
         <!-- booleans -->
         <meta name="if:full background" content="" />
-        <meta name="if:header" content="" />
         <meta name="if:grid" content="" />
    
  <!-- Part two: CSS -->       
@@ -211,6 +205,10 @@ if I don't have any colors, it will be blue by default for most browsers
             justify-content:center;
         }
         
+        .align-center {
+            align-items:center;
+        }
+        
         blockquote {
             border-left:2px solid {color:blockquote border};
             padding-left:10px;
@@ -220,6 +218,7 @@ if I don't have any colors, it will be blue by default for most browsers
         
         main {
             width:100%;
+
             justify-content:space-around;
             align-items:flex-start;
         }
@@ -227,8 +226,8 @@ if I don't have any colors, it will be blue by default for most browsers
         
         
         section {
-            width:100%;
-            
+           width:calc(100% - 300px);/* this makes sure that the container can hold the sidebar *and* the posts. since the sidebar's max-width is 300px, we're calculating the difference between 100% of the page's width and the 300px width of the sidebar */
+            margin:auto; /* makes sure this container is centered */
         }
         
         /* one of the theme options is for a grid. to make it easier to toggle between the grid and single column without javascript, the condition is that if a user turns on grid mode, it will add the grid class to the body tag.
@@ -262,7 +261,8 @@ if I don't have any colors, it will be blue by default for most browsers
             background:{color:posts};
             max-width:700px;
             width:90%;
-            margin:50px auto 100px auto;
+            margin:50px auto 100px 300px; 
+            /* the order of margins is top right bottom left. we're moving the posts 300px from the left to make room for the sidebar */
         }
         
         
@@ -291,24 +291,26 @@ if I don't have any colors, it will be blue by default for most browsers
         
         /* sidebar */
         
-        /* this is the styling for when the header option is NOT on. 
-    for responsive purposes, I used 25% for the main width, and set the maxium width to 250px */
+        /* this is the sidebar styling. 
+    for responsive purposes, I used 25% for the main width, and set the maxium width to 300px
+    */
         aside {
             width:25%;
             position:fixed;
             top:50px;
             left:5%;
-            background:{color:sidebar};
-            max-width:250px;
+            background:{color:posts};
+            max-width:300px;
             margin-top:0px;
         }
         
-        /* this is for when we enable the header option.
-        
-        it takes the same element as the sidebar but stretches it out and puts it at the top of the page instead of on the side */
+        /* if you want a header, this is some basic styling for that. 
+            you can adjust this based on if you want the width to be 100% or if you're fine with it only taking the same amount of space as the posts.
+            If you want this header to go across the whole page, you need to delete the max-width line.
+        */
     
         
-        aside.header {
+        header {
             position:relative;
             width:90%;
             left:auto;
@@ -373,22 +375,13 @@ if I don't have any colors, it will be blue by default for most browsers
         }
         
         /* quote post */
-        
-        .quote {
-            background:{color:quotes};
-            color:{color:quote text};
-        }
         .quote, .source {
             padding:20px;
         }
         
         /* link post */
         .link {
-            background:{color:link post};
             padding:10px;
-        }
-        .link a {
-            color:{color:link text};
         }
         
         /* chat post */
@@ -410,7 +403,6 @@ if I don't have any colors, it will be blue by default for most browsers
         /*answer posts */
         .question {
             padding:20px;
-            background:{color:answer posts};
         }
     
         
@@ -451,6 +443,10 @@ if I don't have any colors, it will be blue by default for most browsers
             border-top:1px solid rgba(0,0,0,.04);
         }
         
+        .info a {
+            margin:0 4px;
+        }
+        
         pre {
             word-wrap:break-word!Important;
              white-space: pre-wrap; 
@@ -489,10 +485,18 @@ This sets the styling for the sidebar but ONLY when the screen size is less than
 @media only screen and (max-width: 1100px) {
         aside {
             position:relative;
-            width:60%;
+            width:100%;
             left:auto;
             max-width:700px;
             margin:50px auto;
+        }
+        
+        section {
+            width:100%;
+        }
+        
+        article {
+            margin:100px auto; /* since the sidebar is a header here, we're removing the 300px left margin so that the articles stay in the center of the page */
         }
     
 }
@@ -513,7 +517,7 @@ This sets the styling for the sidebar but ONLY when the screen size is less than
         <main class="flex">
 
 <!-- sidebar -->
-        <aside class="{block:ifheader}header{/block:ifheader}">
+        <aside>
 
         <div class="sideheader">
             <img src="{portraiturl-128}" class="{AvatarShape}">
@@ -713,12 +717,18 @@ This sets the styling for the sidebar but ONLY when the screen size is less than
             
             <!-- important to wrap your info in date blocks, otherwise they will appear on *every* page, even the ask and submit pages -->
             {block:Date}
-            <div class="info">
+            <!-- the reason I added the align-center class here is so that everything is perfectly centered vertically. With like and reblog buttons, sometimes it can look awkward since these aren't always the same height as the info text. this makes sure that all of the info content will be centered no matter what -->
+            <div class="info flex align-center">
             <!-- this is a day page link. this will take you to all the posts made on that specific day -->
                 <a href="/day/{Year}/{MonthNumberWithZero}/{dayofmonthwithzero}">Posted on {ShortMonth} {DayofMonth}, {Year} </a>
                 <!-- notecount block will only render the notes if there is at least 1 note on the post. if you would like to display notecount even if there are 0 notes, delete the notecount blocks -->
                 {block:NoteCount} with
 	    <a href="{permalink}">{NoteCountWithLabel}</a>
+	    
+	    <!-- if you want to add like and reblog buttons, this is the simplest way to do that. you can also use {ReblogURL} if you want to use a custom icon. using a custom icon for like buttons is a bit more tricky, but shythemes has a good tutorial for how to do this 
+	    {ReblogButton} {LikeButton}
+	    
+	    -->
 	{/block:NoteCount}
 	
 	<!-- the reblogged from and source links are hidden on the indexpage by using permalinkpage blocks. if you'd like it to display on index pages, remove the permalinkpage blocks. you do need to keep the rebloggedfrom blocks though. -->
