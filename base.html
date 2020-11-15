@@ -586,6 +586,7 @@ This sets the styling for the sidebar but ONLY when the screen size is less than
             
             <!-- styling whenever it is a reblogged post -->
            {block:Rebloggedfrom}
+	   <div class="caption">
             <div class="reblog-list">
             {block:Reblogs}
             <div class="reblogs">
@@ -602,6 +603,7 @@ This sets the styling for the sidebar but ONLY when the screen size is less than
                      </div>
             </div>
             {/block:Reblogs}
+            </div>
             </div>
             {/block:RebloggedFrom}
             {/block:Text}
