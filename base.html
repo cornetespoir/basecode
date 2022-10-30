@@ -1,566 +1,296 @@
-<!--
-// {Thm:base}
-   
-    Base code
- 
-by egg.design  //
- 
-    + basic html and css knowledge is required to customize this theme
-    + you are free to add your own credts, but please mention this base code with the release of your theme
-    + instructions and explanations are throughout the code. I will be going under the assumption that you are new to HTML and CSS, so feel free to skip ahead if you need to
-   
-Version 1.1
+<!-- 
 
-- simplified theme and added more explanations
+egg.design base tumblr theme 
+
+version 2.0: completely rewritten !
 
 -->
-
-<!-- part one: the basics 
-
-If you are brand new to HTML, here's some background info on how it works:
-
-every single tag is going to follow this format:
-
-<tagname>content</tagname> 
-like this:
-<header>content</header>
-<div>content</div>
-<b>content</b>
-the <> are added to separate tags from plain text so that the browser knows not to display the words inside of the tag. 
-
-attributes add extra information to our html elements. They go in the opening tag for an element and follow this format:
-
-attribute="value"
-
-this is commonly found in links and images.
-<a href="link">link</a>
-<img src="image.png">
-
-it's also used for classes and ids (they name tags something more specific)
-
-<div class="egg"></div>
-
-for css class is . and id is #
-so the line above would be .egg in CSS. if it were <div id="egg"></div it would be #egg.
-
-Ids are more speicifc than classes, and can only be used ONCE per name. Do not name your posts #posts. use .posts instead. When in doubt, use a class. 
-
-Keep in mind your id and class names have to be one word. 
-
-
-before we get into the actual theme, important things to know:
-
-+ closing tags are important. the only tags I can think of that DONT require closing tags are link tags (seen below for stylesheets),  meta tags, source tags, img tags, and <br>. Everything else should need a closing tag. 
-
-+ keep your code as organized as you can. this isn't "required", but it will make your job easier in the long run. You can do this with comments like I'm doing for these instructions.
-
-+ when in doubt, google it. If you can't remember if a tag needs a closing tag, double check! If you forgot the syntax for a link tag, look it up!, if you can't remember how to use a CSS property, w3schools, css tricks, and mdn web docs will be your best friend 
-
-+ stackoverflow is also going to be your best friend. virtually any question you have will most likely already be answered there
-
-+ don't worry if your first theme doesn't look great, or if you can't figure out exactly how to do what you wanted to do. it takes time and practice! It's okay to delay your first theme/released code until you feel more comfortable with your coding knowledge/skills. 
-
--->
-
-
-<!DOCTYPE html> <!-- this line declares that this is an html5 document -->
-<html> <!-- this line actually starts our html document -->
-    <head> <!-- head tag is where all of our extra info about our document goes. this includes the favicon, title, css, scripts, and meta tags -->
-    
-    <!-- favicon -->
+<!DOCTYPE html> 
+<html> 
+    <head>
      <link rel="shortcut icon" href="{Favicon}" />
-     <!-- rss -->
      <link rel="alternate" type="application/rss+xml" href="{RSS}" />
-     <!-- title and description -->
         <title>{Title}</title>
         {block:Description}
             <meta name="description" content="{MetaDescription}" />
         {/block:Description}
-        <!-- stylesheets -->
-        <link href="https://fonts.googleapis.com/css?family={text:Google Font}:700,400" rel="stylesheet">
-         <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-         
-         <!-- this line ensures that your theme will be mobile friendly -->
+        {NewPostStyles}
+
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
         
-        <!-- image options -->
+      {block:Options}
         <meta name="image:background" content="" />
-        
-        <!-- color options -->
         <meta name="color:background" content="#f8f8f8" />
         <meta name="color:text" content="#222" />
-        <meta name="color:blockquote border" content="#222"/>
-        <meta name="color:links" content="#222" />
+        <meta name="color:border" content="#222"/>
         <meta name="color:sidebar header" content="#facade" />
         <meta name="color:posts" content="#fff" />
-
-        
-        <!-- text options -->
         <meta name="text:Google Font" content="Poppins" />
-        
-        <!-- booleans -->
         <meta name="if:full background" content="" />
-        <meta name="if:grid" content="" />
-   
- <!-- Part two: CSS -->       
+    {/block:Options}
+    
     <style>
-    
-/* While CSS doesn't add any structure to the page like HTML does, it is vital to making your theme look good. the syntax goes like this:
-
-selector {
-    property: value;
-    property: value;
+/* Theme Options */
+        :root {
+            --background-image: url({image:background});
+            --background-color: {color:background};
+            --spacing-sm: .6rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 2rem;
+            --posts: {color:posts};
+            --text: {color:text};
+            --borders: {color:border};
+            --links: {AccentColor};
+            --header-image: url({headerImage});
+        }
+        
+* {
+     box-sizing:border-box;
+}
+ body {
+     margin:0;
+     background-color: var(--background-color);
+     background-image:var(--background-image);
+     {
+        block:iffullbackground
+    }
+     background-size:cover;
+     {
+        /block:iffullbackground
+    }
+     background-attachment:fixed;
+     font-family:Helvetica;
+     word-wrap:break-word;
+     font-size: 16px;
+}
+ .flex {
+     display:flex;
+     flex-wrap:wrap;
+}
+ .centered {
+     align-items:center;
+     justify-content:center;
+}
+ .align-center {
+     align-items:center;
+}
+ blockquote {
+     border-left:2px solid var(--borders);
+     padding-left:var(--spacing-sm);
+     margin:0 0 0 var(--spacing-md);
+}
+ main {
+     width:100%;
+     margin:auto;
+     max-width:1230px;
+     justify-content:space-around;
+     align-items:flex-start;
+}
+ section {
+     width:calc(100% - 400px);
+}
+ .info, .tags, .reblog-content, .reblog-header, .original-post, .quote, .source {
+     padding: var(--spacing-md);
+}
+ .reblogs:not(:first-of-type) .reblog-header{
+     border-top:1px solid var(--borders);
+}
+ .reblog-header, .reblog-content {
+     padding-bottom:0;
+}
+ p:empty {
+     display:none;
+}
+ .tags {
+     width:100%;
+     padding-top:0;
+}
+ .info {
+     justify-content:space-between;
+}
+ .like-and-reblog {
+     width:50px;
+     justify-content:space-between;
+}
+ article h1 {
+     margin:0;
+}
+ article {
+     background:var(--posts);
+     max-width:540px;
+     width:90%;
+     border:1px solid var(--borders);
+     border-radius:var(--spacing-sm);
+     margin:calc(var(--spacing-lg) * 4) auto;
+}
+ ol.notes li {
+     padding:10px;
+}
+ ol.notes img {
+     display:none;
+}
+ article img {
+     max-width:100%;
+     display:block;
+     margin: auto;
+}
+ a {
+     text-decoration:none;
+     color:var(--links);
+}
+ aside {
+     max-width:300px;
+     height:100vh;
+     align-content:center;
+     position:sticky;
+     top:0;
+}
+ aside header {
+     width: 100%;
+}
+ .side-container {
+     overflow:hidden;
+     border-radius:var(--spacing-sm);
+     background:var(--posts);
+     color:var(--text);
+     border:1px solid var(--borders);
+}
+ .show-header {
+     aspect-ratio: 15 / 7;
+     background:var(--header-image);
+     background-size:cover;
+     background-position:center bottom;
+     align-items:flex-end!important;
+     margin-bottom:32px;
+}
+ .avatar {
+     width:64px;
+}
+ .show-header .avatar {
+     transform:translateY(32px);
+}
+ .description, .links {
+     padding:var(--spacing-md);
+     text-align:center;
+}
+ .links {
+     padding-top:0;
+     line-height:1.4;
+     font-weight:600;
+}
+ .links a {
+     margin:0 var(--spacing-sm);
+}
+ @media only screen and (max-width: 1100px) {
+     aside {
+         position:relative;
+         width:100%;
+         left:auto;
+         max-width:700px;
+         margin:50px auto;
+    }
+     .show-header {
+         aspect-ratio: 5 / 1;
+    }
+     section {
+         width:100%;
+    }
+     article {
+         margin:100px auto;
+    }
+}
+ #highlighted {
+     display:flex;
+     justify-content:space-between;
+     flex-wrap:wrap;
+     margin-top:var(--spacing-lg);
+}
+ #highlighted a {
+     width:31%;
+     margin-bottom:3%;
+     height:6rem;
+     border-radius:calc(var(--spacing-md) / 2);
+}
+ #highlighted img {
+     width:100%;
+     height:100%;
+     border-radius:calc(var(--spacing-md) / 2);
+     object-fit:cover;
+}
+ .pagination {
+     width:100%;
+     margin-bottom:var(--spacing-lg);
+}
+ .tumblr_audio_player {
+     width:100%;
+}
+ .link {
+     padding:var(--spacing-md);
+}
+ .home-page .links a[href="/"], .ask-page .links a[href="/ask"], .submit-page aside a[href="/submit"], .active-link {
+     border-bottom:2px solid var(--links);
 }
 
-selector is "selecting" a specific tag. the property is the thing we want to change and the value is how we change it.
-
-- example -
-what we are selecting: the whole page
-thing we want to change: the background color
-how we want to chnge it: make it blue
-
-selector = body
-property = background
-value = blue
-
-- result - 
-
-body{
-    background: blue;
+.question {
+    border:1px solid var(--borders);
+    padding:var(--spacing-md);
+    margin:var(--spacing-md);
 }
 
-
-Please keep in mind that CSS follows a specific order of importance
-
-1) anything marked with !important will take top priority
-2) anything more specific will take the next priority
-3) the "most recent" will take the next prioirty
-4) if no other style, default browser styling will be used 
-
-an example of these: 
-
-
-lets say I want some links to be blue
-
-a {
-    color:blue;
-    color:green;
+.answer-post .replies {
+    padding:var(--spacing-md);
 }
-
-they will not be blue in this case because "green" is the most recent addition 
-
-however, if I add !important like this:
-
-a {
-    color:blue!important;
-    color:green;
-
-}
-
-then it will be blue (please don't do this. it's just an example. just use the first line and try not to repeat properties for the same element. !important should be used as a last resort/juuuust to make sure it will appaer)
-
-lets say i want most links blue but i want header links to be green.
-
-a {
-    color:blue;
-}
-
-header a {
-    color:green;
-}
-
-this would work  because header a is more specific. all the non sepcific links will still be blue, but because we selected "header a" (this means we are selecting all the links inside of the header), these links will be green because it is more specific. 
-
-
-if I don't have any colors, it will be blue by default for most browsers 
-
-*/
-
-/* ok, that was a quick crash course on how CSS works! I'll try to explain extra  things as I go */ 
-
-
-        body {
-            margin:0;
-            
-            /* any time we reference an option from the meta tags, the format is {option:value}
-    here we used color and image options. 
-    the boolean option is a contional brance for a full background size. if a user enables it, we "turn on" the full background size. otherwise, it repeats */
-            background:{color:background} url({image:background});
-            {block:iffullbackground}
-            background-size:cover;
-            {/block:iffullbackground}
-            /* fixed attachments help the repeating background from scrolling with the page */
-            background-attachment:fixed;
-            font-family:Poppins;
-            /* this is useful for preventing text from overflowing outside of the post */
-            word-wrap:break-word;
-        }
-        
-        
-        /* flexbox might end up being your new best friend. It is super helpful for aligning things perfectly both horizontal and vertically. Makes your life much easier instead of using a bunch of margins. Because I use flexbox pretty frequently in this base code, I made a class specifically for it. This is a lot faster instead of having to type out flexbox properties each time */
-        
-        .flex {
-            display:flex;
-            flex-wrap:wrap;
-        }
-        .centered {
-            align-items:center;
-            justify-content:center;
-        }
-        
-        .align-center {
-            align-items:center;
-        }
-        
-        blockquote {
-            border-left:2px solid {color:blockquote border};
-            padding-left:10px;
-        }
-        
-        /* while it is common to have divs with ids and classes for containers, I'm using a main tag. Main tags are "new" tags to HTML5 that function the same as div, but are more clear for their purpose. This makes for easier navigation of your code instead of having a bunch of divs */
-        
-        main {
-            width:100%;
-
-            justify-content:space-around;
-            align-items:flex-start;
-        }
-        
-        
-        
-        section {
-           width:calc(100% - 300px);/* this makes sure that the container can hold the sidebar *and* the posts. since the sidebar's max-width is 300px, we're calculating the difference between 100% of the page's width and the 300px width of the sidebar */
-            margin:auto; /* makes sure this container is centered */
-        }
-        
-        /* one of the theme options is for a grid. to make it easier to toggle between the grid and single column without javascript, the condition is that if a user turns on grid mode, it will add the grid class to the body tag.
-        So, the grid is only going to appear if the body has the grid class on the index page. Grid layouts on permalink pages usually look weird so this class will ONLY apply on the index. */
-        {block:indexpage}
-        section.grid {
-            column-count:2;
-            grid-gap:20px;
-            margin-top:50px;
-            max-width:1000px;
-            width:70%;
-        }
-        section.grid article {
-            width:100%;
-            break-inside:avoid;
-            margin:0 0 20px 0;
-        }
-        
-        section.grid .caption, section.grid .info, section.grid .tags {
-            padding:10px;
-        }
-        {/block:indexpage}
-        
-        
-        /* here are our posts. I use a slightly different method than just having a static post size. here is the way I do it:
-        I set the default width to 90% and the maxium width to 700px.. This is helpful for mobile. That way, on desktop it will typically be up to 700px, but on mobile it will take up 90% of the page. This is a lot easier than using media queries for this. But, you can remove that and do a static width instead 
-        If you want smaller posts, you can change 700px to something smaller
-        
-        */
-        article {
-            background:{color:posts};
-            max-width:700px;
-            width:90%;
-            margin:50px auto 100px 300px; 
-            /* the order of margins is top right bottom left. we're moving the posts 300px from the left to make room for the sidebar */
-        }
-        
-        
-        /* post note styling */
-        ol.notes li {
-            padding:10px;
-        }
-        ol.notes img {
-            display:none;
-        }
-        
-        /* this will prevent the image from stretching. 
-        by adding margin: auto and display:block, the photo will be in the center of the post if it's not the full width of the post */
-    
-        article img {
-            max-width:100%;
-            display:block;
-            margin: auto;
-        }
-        
-        a {
-            text-decoration:none;
-            color:{color:links};
-        }
-  
-        
-        /* sidebar */
-        
-        /* this is the sidebar styling. 
-    for responsive purposes, I used 25% for the main width, and set the maxium width to 300px
-    */
-        aside {
-            width:25%;
-            position:fixed;
-            top:50px;
-            left:5%;
-            background:{color:posts};
-            max-width:300px;
-            margin-top:0px;
-        }
-        
-        /* if you want a header, this is some basic styling for that. 
-            you can adjust this based on if you want the width to be 100% or if you're fine with it only taking the same amount of space as the posts.
-            If you want this header to go across the whole page, you need to delete the max-width line.
-        */
-    
-        
-        header {
-            position:relative;
-            width:90%;
-            left:auto;
-            max-width:700px;
-            margin:50px auto 100px auto;
-        }
-        
-        
-        /* this is the avatar image. I used transform to move the image up a bit to recreate the Optica look with the header */
-        aside img {
-            width:80px;
-            display:block;
-            margin:auto;
-            transform:translateY(107px);
- 
-        }
-        /* using the global customization variable for circle or square icon, we're adding a circle or sqare class to the image. If it's a square, it only has a slight border radius. If it's a circle, it has 100% border radius */
-        aside img.square {
-            border-radius:3.2px;
-        }
-        
-        aside img.circle {
-            border-radius:100%;
-        }
-        
-        /* this is the "header" in the sidebar. using the global customization option the user can either pick a solid color or use their header image from mobile */
-        
-        .sideheader {
-            {block:ShowHeaderImage}
-            background:url({HeaderImage}) center center fixed;
-            background-size:cover; {/block:ShowHeaderImage}
-            background-color:{color:sidebar header};
-            height:150px;
-           
-        }
-        
-        /* description and link section are styled the same, so we use a comma to include them on the same line. This reduces the length of the code instead of typing the same thing out twice */
-        .description, .links {
-            padding:16px;
-            text-align:center;
-        }
-        
-        /* sidebar links */
-        .links a {
-            margin:0 10px;
-        }
-        .description {
-            margin-top:40px;
-      
-        }
-        /* text post */
-        
-        .textpost h1 {
-            padding:20px;
-            border-bottom:1px solid rgba(0,0,0,.04);
-            margin:0;
-        }
-        
-        /* photoposts */
-        .photopost img {
-            width:100%;
-        }
-        
-        /* quote post */
-        .quote, .source {
-            padding:20px;
-        }
-        
-        /* link post */
-        .link {
-            padding:10px;
-        }
-        
-        /* chat post */
-        
-        .chat {
-            margin:0;
-            padding:0;
-        }
-        .chat li {
-            list-style:none;
-            padding:10px;
-        }
-        
-        .chat li:nth-of-type(odd) {
-            background:{color:text};
-            color:{color:posts};
-        }
-        
-        /*answer posts */
-        .question {
-            padding:20px;
-        }
-    
-        
-        .replies {
-            padding:20px;
-        }
-        
-        /*Audio posts */
-        
-        .audiopost img {
-            width:120px;
-            height:120px;
-        }
-        .audiopost iframe {
-            width:100%;
-        }
-        
-        .audioinfo {
-            width:calc(100% - 140px);
-            align-items:center;
-            padding:0 10px;
-        }
-        .theinfo {
-            padding:20px;
-        }
-        /* captions */
-        .caption {
-            padding:20px;
-        }
-        
-        .reblog-header a {
-            font-weight:bold;
-        }
-        
-        /* post info */
-        .info {
-            padding:20px;
-            border-top:1px solid rgba(0,0,0,.04);
-        }
-        
-        .info a {
-            margin:0 4px;
-        }
-        
-        pre {
-            word-wrap:break-word!Important;
-             white-space: pre-wrap; 
-        }
-        
-        /* tags */
-        .tags {
-            padding:10px 20px;
-        }
-        
-        .inactive:hover:after {
-            content:'deactivated';
-        }
-        
-        /* pagination */
-        .pagination {
-            width:90%;
-            text-align:center;
-            margin:40px auto;
-        }
-        
-        /*credit */
-        footer {
-            width:50%;
-            margin:20px auto;
-            text-align:center;
-        }
-        
-        /* mobile friendly sidebar */
-
-
-/* this is a media query, important for mobile design.
-This sets the styling for the sidebar but ONLY when the screen size is less than 1100px. Basically, this makes the sidebar function as a header once the screen gets too small to include both a sidebar and the posts */
-
-
-@media only screen and (max-width: 1100px) {
-        aside {
-            position:relative;
-            width:100%;
-            left:auto;
-            max-width:700px;
-            margin:50px auto;
-        }
-        
-        section {
-            width:100%;
-        }
-        
-        article {
-            margin:100px auto; /* since the sidebar is a header here, we're removing the 300px left margin so that the articles stay in the center of the page */
-        }
-    
-}
-
-/* this block is required for theme garden. It allows people to add custom css in the customization panel */
-
        {CustomCSS}
     </style>    
     </head>
-    <body>
+    <body class="{block:homepage}home{/block:homepage}{block:tagpage}tag{/block:tagpage}{block:searchpage}search{/block:searchpage}{block:submitpage}submit-{/block:submitpage}{block:AskPage}ask{/block:AskPage}-page">
     
-    <!-- this is the basic html structure of a theme (with some extra features in there. This theme uses dashboard captions and contains all the variables (that I can think of) required for the theme garden.  -->
-    
-    
-<!-- occassionally you will see blocks containing "has" like hastags. This block is for finding if the blog *has* these things first before rendering it. For example, if a post doesn't have any tags, this way it won't take up any space even if your css has a specific height on it. -->
-    <!-- main container -->
-
-        <main class="flex">
-
-<!-- sidebar -->
-        <aside>
-
-        <div class="sideheader">
-            <img src="{portraiturl-128}" class="{AvatarShape}">
-            </div>
+<!-- main container -->    
+    <main class="flex">
+        <aside class="flex centered">
+            <div class="side-container">
+            
+<!-- global theme options/blog info -->            
+            <header class="flex centered {block:ShowHeaderImage}show-header{block:ShowHeaderImage}">
+                <img src="{portraiturl-96}" class="avatar {AvatarShape}">
+            </header>
+            {block:ShowDescription}
             <div class="description">
                 {Description}
             </div>
-        
+            {/block:ShowDescription}
             <div class="links">
-            <a href="/">{lang:Home}</a>
-            <!-- these blocks for ask and submit links hide the links if the user does not have these enabled. -->
-            {block:askenabled}
-            <a href="/ask">Ask</a>
-            {/block:askenabled}
-            {block:submissionsenabled}
-            <a href="/submit">Submit</a>
-            {/block:submissionsenabled}
-            <a href="/archive">Archive</a>
-            
-            <!-- this section is for additional pages. any page the user makes with "show a link to this page" enabled, will appear here --> 
-                {block:HasPages}<p>
-                {block:Pages}
-                <a href="{URL}">{Label}</a>
-                {/block:Pages}
-		</p>
+                <a href="/">{lang:Home}</a>
+                {block:askenabled}
+                <a href="/ask">Ask</a>
+                {/block:askenabled}
+                {block:submissionsenabled}
+                <a href="/submit">Submit</a>
+                {/block:submissionsenabled}
+                <a href="/archive">Archive</a>
+                {block:HasPages}
+                    {block:Pages}
+                        <a href="{URL}">{Label}</a>
+                    {/block:Pages}
                 {/block:HasPages}
-	</div>
+                </div>
+            </div>
+            {block:HasHighlightedPosts}
+            <div id="highlighted">
+                {block:HighlightedPosts}
+                <a href="{Permalink}">
+                    <img src="{PhotoURL-250}">
+                </a>
+                {/block:HighlightedPosts}
+            </div>
+            {/block:HasHighlightedPosts}
         </aside>
-      
-      
-      <!-- here we are using the boolean for a grid layout. if the user turns that on, the section will get the grid class and will be styled using the css we put for the grid class -->
+        
+<!-- posts -->        
         <section {block:ifgrid} class="grid" {/block:ifgrid}>
-        
-        <!-- posts --> 
-        
-        <!-- all the basic post variables are below. To get a good summary of what each variable means, please read the theme docs: https://www.tumblr.com/docs/en/custom_themes as these are tumblr specific and don't apply to general html  -->
-        
-        
-        <!-- this removes the default source/via links 
         {block:Posts}
+        
+<!-- this removes the default source/via links  -->
 <!-- {block:NoRebloggedFrom}
 {block:RebloggedFrom}{ReblogParentName}{/block:RebloggedFrom}
 {/block:NoRebloggedFrom} -->
@@ -569,137 +299,115 @@ This sets the styling for the sidebar but ONLY when the screen size is less than
 {block:NoSourceLogo}{SourceLink}{/block:NoSourceLogo} -->
 {/block:ContentSource}
 
-<!-- by using the {postyype} variable, we can make classes for each post type without having to type them all out individually -->
-            <article class="{posttype}post posts">
-            <!-- text posts -->
+            <article class="{posttype}-post posts">
+            
+<!-- text posts (includes NPF posts) -->            
             {block:Text}
-            <!-- title block hides the title section if the post has no title -->
-            {block:Title}
-            <h1>{Title}</h1>
-            {/block:Title}
-            
-            <!-- this is styling for when this is an original post/not reblogged -->
-            {block:Notreblog}
-            <div class="caption">
+                {block:Notreblog}
+                <div class="caption original-post">
+                    {block:Title}
+                    <h2>{Title}</h2>
+                    {/block:Title}
                 {Body}
-            </div>
-            {/block:Notreblog}
-            
-            <!-- styling whenever it is a reblogged post -->
-           {block:Rebloggedfrom}
-	   <div class="caption">
-            <div class="reblog-list">
-            {block:Reblogs}
-            <div class="reblogs">
-                <div class="reblog-header">
-                    {block:isactive}
-                    <a href="{permalink}">{username}</a>
-                    {/block:isactive}
-                    {block:isdeactivated}
-                    <a href="{permalink}" class="inactive">{username}</a>
-                    {/block:isdeactivated}
                 </div>
-                 <div class="reblog-content">
-                        {Body}
-                     </div>
-            </div>
-            {/block:Reblogs}
-            </div>
+                {/block:Notreblog}
+                {block:Rebloggedfrom}
+                <div class="reblog-list">
+                    {block:Reblogs}
+                        <div class="reblogs">
+                        <div class="reblog-header">
+                            {block:isactive}
+                            <a href="{permalink}">
+                                {username}
+                            </a>
+                            {/block:isactive}
+                            {block:isdeactivated}
+                            <a href="{permalink}" class="inactive">
+                                {username}
+                            </a>
+                            {/block:isdeactivated}
+                        </div>
+                        <div class="reblog-content">
+                            {Body}
+                        </div>
+                    </div>
+                {/block:Reblogs}
             </div>
             {/block:RebloggedFrom}
-            {/block:Text}
-            
-            <!-- photo posts -->
-            {block:Photo}
-            <!-- photo alts add a description to the image for screen readers and for if the image doesn't load -->
+        {/block:Text}
+ 
+ <!-- photo, photoset, and panorama posts -->           
+        {block:Photo}
             <img src="{PhotoURL-highres}" al="{photoalt}" class="photos">
-            {/block:Photo}
-            
-            <!-- photoset --> 
-            {block:Photoset}
+        {/block:Photo}
+
+        {block:Photoset}
             {Photoset}
-            {/block:Photoset}
+        {/block:Photoset}
             
-            <!-- panorama -->
-            {block:Panorama}
+        {block:Panorama}
             <img src="{photourl-panorama}" alt="{photoalt}">
-            {/block:Panorama}
-            
-            <!-- quote posts -->
-            {block:Quote}
+        {/block:Panorama}
+        
+<!-- quote posts -->            
+        {block:Quote}
             <div class="quote">
                 "{Quote}"
             </div>
             <div class="source">
                 -{Source}
             </div>
-            {/block:Quote}
-            
-            <!-- chat posts -->
-            {block:Chat}
+        {/block:Quote}
+        
+<!-- chat posts -->            
+        {block:Chat}
             <ul class="chat">
                 {block:Lines}
-                <li>{block:Label}{Label}{/block:Label} {Line}</li>
+                    <li>
+                        {block:Label}{Label}{/block:Label} 
+                        {Line}
+                    </li>
                 {/block:Lines}
             </ul>
-            {/block:Chat}
-            
-            <!--Link posts-->
-            {block:link}
-            <div class="link">
-                <a href="{URL}"><span class="lnr lnr-link" aria-hidden="true"></span> {Name}</a>
-            </div>
-            {/block:link}
-            
-            <!-- video posts -->
-            {block:Video}
-            {Video-700}
-            {/block:Video}
-            
-            <!--Audio posts-->
-            {block:Audio}
-            <div class="audio flex">
-            {block:albumart}
-            <img src="{AlbumArtURL}" alt="Album art for {block:trackname}{Trackname}{/block:trackname}">
-            {/block:albumart}
-            <div class="audioinfo flex">
+        {/block:Chat}
 
-            {block:trackname}{Trackname}{/block:trackname}<br>
-            {block:Album}{Album}{/block:Album} <br>
-            {block:Artist}{Artist}{/block:Artist}
-    
+<!-- link posts -->
+        {block:link}
+            <div class="link">
+                <a href="{URL}">
+                    {Name}
+                </a>
+            </div>
+        {/block:link}
+            
+<!-- vidoe and audio -->            
+        {block:Video}
+            {Video-700}
+        {/block:Video}
+            
+        {block:Audio}
+            {audioembed}
+        {/block:Audio}
            
-            </div>
-               
-            </div>
-              <div class="player">
-                 {AudioPlayer}
-            </div>  
-            {/block:Audio}
-            
-            <!--answer posts-->
-            {block:Answer}
+<!-- Answer posts -->            
+        {block:Answer}
             <div class="question">
-                {Asker}:{Question}
+                {Asker}: {Question}
             </div>
-             <div class="replies">
-         {block:Answerer}
-        {Answerer}: {Answer}
-        {/block:Answerer}
-        {Replies}
-    </div>
-            {/block:Answer}
-            
-            <!-- captions -->
-            {block:Caption}
-            <div class="caption">
-            {block:notreblog}
-            {Caption}
-            {/block:notreblog}
+            {block:Answerer}
+            <div class="replies">
+                {Answerer}: {Answer}
+            </div>
+            {/block:Answerer}
+           {block:NotReblog}
+            <div class="replies">
+                {Replies}
+            </div>
+           {/block:NotReblog}
             {block:Rebloggedfrom}
             <div class="reblog-list">
-            {block:Reblogs}
-            <div class="reblogs">
+                {block:Reblogs}
+                <div class="reblogs">
                 <div class="reblog-header">
                     {block:isactive}
                     <a href="{permalink}">{username}</a>
@@ -709,64 +417,82 @@ This sets the styling for the sidebar but ONLY when the screen size is less than
                     {/block:isdeactivated}
                 </div>
                  <div class="reblog-content">
-                        {Body}
-                     </div>
+                        {Replies}
+                </div>
             </div>
             {/block:Reblogs}
             </div>
             {/block:RebloggedFrom}
+        {/block:Answer}
+        
+<!-- captions for non text/answer posts -->
+        {block:Caption}
+            <div class="caption {block:notreblog} original-post {/block:notreblog}">
+            {block:notreblog}
+            {Caption}
+            {/block:notreblog}
+            {block:Rebloggedfrom}
+                <div class="reblog-list">
+                {block:Reblogs}
+                <div class="reblogs">
+                    <div class="reblog-header">
+                        {block:isactive}
+                        <a href="{permalink}">{username}</a>
+                        {/block:isactive}
+                        {block:isdeactivated}
+                        <a href="{permalink}" class="inactive">{username}</a>
+                        {/block:isdeactivated}
+                    </div>
+                    <div class="reblog-content">
+                        {Body}
+                    </div>
+                </div>
+                {/block:Reblogs}
             </div>
-            {/block:Caption}
+            {/block:RebloggedFrom}
+        </div>
+        {/block:Caption}
             
-            
-            <!-- post info -->
-            
-            <!-- important to wrap your info in date blocks, otherwise they will appear on *every* page, even the ask and submit pages -->
-            {block:Date}
-            <!-- the reason I added the align-center class here is so that everything is perfectly centered vertically. With like and reblog buttons, sometimes it can look awkward since these aren't always the same height as the info text. this makes sure that all of the info content will be centered no matter what -->
+<!-- post info. wrapping these in {block:Date} prevents them from dispalying on ask, submit, and custom pages -->
+        {block:Date}
             <div class="info flex align-center">
-            <!-- this is a day page link. this will take you to all the posts made on that specific day -->
-                <a href="/day/{Year}/{MonthNumberWithZero}/{dayofmonthwithzero}">Posted on {ShortMonth} {DayofMonth}, {Year} </a>
-                <!-- notecount block will only render the notes if there is at least 1 note on the post. if you would like to display notecount even if there are 0 notes, delete the notecount blocks -->
+                <div class="perma-info">
+                    <a href="/day/{Year}/{MonthNumberWithZero}/{dayofmonthwithzero}">Posted on {ShortMonth} {DayofMonth}, {Year} </a>
                 {block:NoteCount} with
-	    <a href="{permalink}">{NoteCountWithLabel}</a>
-	    
-	    <!-- if you want to add like and reblog buttons, this is the simplest way to do that. you can also use {ReblogURL} if you want to use a custom icon. using a custom icon for like buttons is a bit more tricky, but shythemes has a good tutorial for how to do this 
-	    {ReblogButton} {LikeButton}
-	    
-	    -->
-	{/block:NoteCount}
-	
-	<!-- the reblogged from and source links are hidden on the indexpage by using permalinkpage blocks. if you'd like it to display on index pages, remove the permalinkpage blocks. you do need to keep the rebloggedfrom blocks though. -->
-                {block:permalinkpage}
+	            <a href="{permalink}">{NoteCountWithLabel}</a>
+	            {/block:NoteCount}
+	            {block:permalinkpage}
                 <br>
-
                 {block:rebloggedfrom}
-                <a href="{reblogparenturl}">reblogged from {reblogparentname}</a> / <a href="{reblogrooturl}">posted by {reblogrootname} </a>
+                    <a href="{reblogparenturl}">
+                        from {reblogparentname}
+                    </a> 
+                    <a href="{reblogrooturl}">
+                        posted by {reblogrootname} 
+                    </a>
                 {/block:rebloggedfrom}
                 {/block:permalinkpage}
             </div>
-            {/block:Date}
-            
-            
-            <!-- tags -->
-            {block:Hastags}
-            <div class="tags">
-            {block:Tags}
-            <a href="{TagURL}">#{Tag}</a>
-            {/block:Tags}
+            <div class="like-and-reblog flex align-center">    
+                {ReblogButton} {LikeButton}
             </div>
-            {/block:Hastags}
+            </div>
+        {/block:Date}
             
-            <!-- post note list -->
+<!-- tags -->            
+        {block:Hastags}
+            <div class="tags">
+                {block:Tags}
+                <a href="{TagURL}">#{Tag}</a>
+                {/block:Tags}
+            </div>
+        {/block:Hastags}
+            
             {PostNotes}
-            </article> <!-- end posts -->
+        </article>
             {/block:Posts}
-            </section> <!-- end post section -->
-            
-            <!-- pagination -->
-            {block:Pagination}
-            <div class="pagination">
+              {block:Pagination}
+            <div class="pagination flex centered">
                 {block:previouspage}
                 <a href="{previouspage}">Prev</a>
                 {/block:previouspage}
@@ -775,10 +501,15 @@ This sets the styling for the sidebar but ONLY when the screen size is less than
                 {/block:nextpage}
             </div>
             {/block:pagination}
-        </main> <!-- end container -->
-        
-        <footer> base code by <a href="https://egg.design">egg.design</a> </footer>
-        
-        <!-- and that's it! I hope this helped! -->
-    </body>
+        </section> 
+    </main>
+</body>
+
+<!-- script for sidebar link underlines -->
+<script src="https://static.tumblr.com/svdghan/YKFrgf76v/linkunderline.js"></script>
+    <script>
+        links = '.links a';
+        active = 'active-link';
+        linkUnderline();
+    </script>
 </html>
