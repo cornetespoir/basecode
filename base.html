@@ -316,7 +316,7 @@ version 2.0: completely rewritten !
                     {block:Reblogs}
                         <div class="reblogs">
                         <div class="reblog-header">
-                          <a href="{permalink}" {block:isdeactivated}class="inactive" {/block:isdeactivated}>
+                             <a href="{permalink}" {block:isdeactivated}class="inactive"{/block:isdeactivated}>
                                 {username}
                             </a>
                         </div>
@@ -331,7 +331,7 @@ version 2.0: completely rewritten !
  
  <!-- photo, photoset, and panorama posts -->           
         {block:Photo}
-            <img src="{PhotoURL-highres}" al="{photoalt}" class="photos">
+            <img src="{PhotoURL-HighRes}" alt="{photoalt}" class="photos">
         {/block:Photo}
 
         {block:Photoset}
@@ -402,9 +402,9 @@ version 2.0: completely rewritten !
                 {block:Reblogs}
                 <div class="reblogs">
                 <div class="reblog-header">
-                     <a href="{permalink}" {block:isdeactivated}class="inactive" {/block:isdeactivated}>
-                       {username}
-                     </a>
+                     <a href="{permalink}" {block:isdeactivated}class="inactive"{/block:isdeactivated}>
+                                {username}
+                            </a>
                 </div>
                  <div class="reblog-content">
                         {Replies}
@@ -426,9 +426,9 @@ version 2.0: completely rewritten !
                 {block:Reblogs}
                 <div class="reblogs">
                     <div class="reblog-header">
-                        <a href="{permalink}" {block:isdeactivated}class="inactive" {/block:isdeactivated}>
-                           {username}
-                        </a>
+                        <a href="{permalink}" {block:isdeactivated}class="inactive"{/block:isdeactivated}>
+                                {username}
+                            </a>
                     </div>
                     <div class="reblog-content">
                         {Body}
