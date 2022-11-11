@@ -10,4 +10,4 @@ a base template for tumblr themes. free for personal use or publicly released th
 
 Now you can start editing!
 
-The current file is for direct copying + pasting. For a more in depth look on how to make a theme, check out the wiki!
+The current file is for direct copying + pasting. For a more in depth look on how to make a theme, [check out the wiki](https://github.com/cornetespoir/basecode/wiki)!
