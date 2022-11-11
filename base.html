@@ -316,16 +316,9 @@ version 2.0: completely rewritten !
                     {block:Reblogs}
                         <div class="reblogs">
                         <div class="reblog-header">
-                            {block:isactive}
-                            <a href="{permalink}">
+                          <a href="{permalink}" {block:isdeactivated}class="inactive" {/block:isdeactivated}>
                                 {username}
                             </a>
-                            {/block:isactive}
-                            {block:isdeactivated}
-                            <a href="{permalink}" class="inactive">
-                                {username}
-                            </a>
-                            {/block:isdeactivated}
                         </div>
                         <div class="reblog-content">
                             {Body}
@@ -409,12 +402,9 @@ version 2.0: completely rewritten !
                 {block:Reblogs}
                 <div class="reblogs">
                 <div class="reblog-header">
-                    {block:isactive}
-                    <a href="{permalink}">{username}</a>
-                    {/block:isactive}
-                    {block:isdeactivated}
-                    <a href="{permalink}" class="inactive">{username}</a>
-                    {/block:isdeactivated}
+                     <a href="{permalink}" {block:isdeactivated}class="inactive" {/block:isdeactivated}>
+                       {username}
+                     </a>
                 </div>
                  <div class="reblog-content">
                         {Replies}
@@ -436,12 +426,9 @@ version 2.0: completely rewritten !
                 {block:Reblogs}
                 <div class="reblogs">
                     <div class="reblog-header">
-                        {block:isactive}
-                        <a href="{permalink}">{username}</a>
-                        {/block:isactive}
-                        {block:isdeactivated}
-                        <a href="{permalink}" class="inactive">{username}</a>
-                        {/block:isdeactivated}
+                        <a href="{permalink}" {block:isdeactivated}class="inactive" {/block:isdeactivated}>
+                           {username}
+                        </a>
                     </div>
                     <div class="reblog-content">
                         {Body}
