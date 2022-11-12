@@ -236,6 +236,10 @@ version 2.0: completely rewritten !
 .answer-post .replies {
     padding:var(--spacing-md);
 }
+
+.caption:empty {
+    display:none;
+}
        {CustomCSS}
     </style>    
     </head>
@@ -275,7 +279,7 @@ version 2.0: completely rewritten !
             <div id="highlighted">
                 {block:HighlightedPosts}
                 <a href="{Permalink}">
-                    <img src="{PhotoURL-250}">
+                    <img src="{PhotoURL-250}" alt={PhotoAlt}>
                 </a>
                 {/block:HighlightedPosts}
             </div>
@@ -285,7 +289,6 @@ version 2.0: completely rewritten !
 <!-- posts -->        
         <section {block:ifgrid} class="grid" {/block:ifgrid}>
         {block:Posts}
-        
 <!-- this removes the default source/via links  -->
 <!-- {block:NoRebloggedFrom}
 {block:RebloggedFrom}{ReblogParentName}{/block:RebloggedFrom}
@@ -295,36 +298,8 @@ version 2.0: completely rewritten !
 {block:NoSourceLogo}{SourceLink}{/block:NoSourceLogo} -->
 {/block:ContentSource}
 
-            <article class="{posttype}-post posts">
-            
-<!-- text posts (includes NPF posts) -->            
-            {block:Text}
-                {block:Notreblog}
-                <div class="caption original-post">
-                    {block:Title}
-                    <h2>{Title}</h2>
-                    {/block:Title}
-                {Body}
-                </div>
-                {/block:Notreblog}
-                {block:Rebloggedfrom}
-                <div class="reblog-list">
-                    {block:Reblogs}
-                        <div class="reblogs">
-                        <div class="reblog-header">
-                             <a href="{permalink}" {block:isdeactivated}class="inactive"{/block:isdeactivated}>
-                                {username}
-                            </a>
-                        </div>
-                        <div class="reblog-content">
-                            {Body}
-                        </div>
-                    </div>
-                {/block:Reblogs}
-            </div>
-            {/block:RebloggedFrom}
-        {/block:Text}
- 
+            <article class="{posttype}-post posts post-tagged-{TagsAsClasses}">
+<!-- text posts (includes NPF posts). Body content is with the other caption blocks + variables -->     
  <!-- photo, photoset, and panorama posts -->           
         {block:Photo}
             <img src="{PhotoURL-HighRes}" alt="{photoalt}" class="photos">
@@ -393,32 +368,18 @@ version 2.0: completely rewritten !
                 {Replies}
             </div>
            {/block:NotReblog}
-            {block:Rebloggedfrom}
-            <div class="reblog-list">
-                {block:Reblogs}
-                <div class="reblogs">
-                <div class="reblog-header">
-                     <a href="{permalink}" {block:isdeactivated}class="inactive"{/block:isdeactivated}>
-                                {username}
-                            </a>
-                </div>
-                 <div class="reblog-content">
-                        {Replies}
-                </div>
-            </div>
-            {/block:Reblogs}
-            </div>
-            {/block:RebloggedFrom}
         {/block:Answer}
         
-<!-- captions for non text/answer posts -->
-        {block:Caption}
-            <div class="caption {block:notreblog} original-post {/block:notreblog}">
+<!-- captions  -->
+        <div class="caption {block:notreblog} original-post {/block:notreblog}">
+            {block:Text}
+                {block:Title}<h2>{Title}</h2>{/block:Title}
+            {/block:Text}
             {block:notreblog}
-            {Caption}
+            {block:caption}{Caption}{/block:caption}
+            {block:Text}{body}{/block:Text}
             {/block:notreblog}
             {block:Rebloggedfrom}
-                <div class="reblog-list">
                 {block:Reblogs}
                 <div class="reblogs">
                     <div class="reblog-header">
@@ -431,10 +392,8 @@ version 2.0: completely rewritten !
                     </div>
                 </div>
                 {/block:Reblogs}
-            </div>
             {/block:RebloggedFrom}
         </div>
-        {/block:Caption}
             
 <!-- post info. wrapping these in {block:Date} prevents them from dispalying on ask, submit, and custom pages -->
         {block:Date}
